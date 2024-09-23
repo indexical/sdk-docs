@@ -1,0 +1,185 @@
+import OptionsTable from "../../components/OptionsTable.tsx";
+import NoteSection from "../../components/NoteSection.tsx";
+import { Link } from "react-router-dom";
+
+# Action: `extract-many`
+
+The `extract-many` action is a specialized version of `extract` that will generate **multiple** JSON datastructures from the current page, all using the same provided schema. It's appropriate when you would like to extract all instances of a certain data structure from a page. If the current page includes pagination, this step will attempt to automatically interact as required to flip through the pages.
+
+The behavior of `extract-many` can be roughly duplicated by using `extract` with a schema containing an array of objects, but this will likely perform substantially worse due to a lack of optimizations.
+
+## Example
+
+```json
+{
+  "action": "extract-many",
+  "goal": "Get details on all the books listed on the page",
+  "schema": {
+    "title": {
+      "type": "string",
+      "description": "Book title"
+    },
+    "price": {
+      "type": "number",
+      "description": "Book price in USD"
+    }
+  }
+}
+```
+
+## Available Options
+
+(See also the Universal Options in the [Actions](/actions) top-level Documentation)
+
+<OptionsTable
+  rows={[
+    {
+      name: "goal",
+      required: true,
+      type: "string",
+      default: null,
+      description: "A natural language goal for the AI to try to achieve.",
+    },
+    {
+      name: "schema",
+      required: false,
+      type: (
+        <>
+          object (see the "Writing Schemas" section in the{" "}
+          <Link to="/actions/extract">Extract docs</Link>)
+        </>
+      ),
+      default: "",
+      description: <>A schema defining the desired output data structure</>,
+    },
+    {
+      name: "validation",
+      required: false,
+      type: "object (see below)",
+      default: "",
+      description: (
+        <>Validate the step's output set using these criteria(see below)</>
+      ),
+    },
+    {
+      name: "validation.required",
+      required: false,
+      type: "string[]",
+      default: [],
+      description: (
+        <>
+          Discard an output unless it has all the keys specified in the provided
+          array.
+        </>
+      ),
+    },
+    {
+      name: "scroll",
+      required: false,
+      type: "boolean",
+      default: "false",
+      description: (
+        <>
+          This option, when true, will attempt to auto-trigger any scroll-based
+          listeners or infinite-scroll-style pagination while
+          paginating/extracting.
+        </>
+      ),
+    },
+    {
+      name: "deduplicate",
+      required: false,
+      type: "boolean",
+      default: "false",
+      description: (
+        <>
+          This option, when true, will deduplicate extracted results so that
+          only unique results are output.
+        </>
+      ),
+    },
+    {
+      name: "delay",
+      required: false,
+      type: "number or [number, number]",
+      default: "0",
+      description: (
+        <>
+          If the page involves pagination, this option introduces a delay after
+          loading each page of the pagination. If pagination is especially slow,
+          this can make sure no items are missed. Can be a number (ms), or a
+          pair of numbers [min, max].
+        </>
+      ),
+    },
+    {
+      name: "limit",
+      required: false,
+      type: "number",
+      default: "",
+      description: <>Only generate at-most this many output objects</>,
+    },
+    {
+      name: "mode",
+      required: false,
+      type: '"textual" or "visual"',
+      default: '"textual"',
+      description: (
+        <>
+          Whether to process the current page as text or as an image when
+          attempting to extract/analyze data. Typically, "textual" provides the
+          best results, but "visual" can be necessary if data is present in
+          graphics or for particularly complicated layouts. "visual" is used by
+          default for PDFs.
+        </>
+      ),
+    },
+    {
+      name: "write",
+      required: false,
+      type: "boolean",
+      default: "true",
+      description: (
+        <>
+          Whether or not to write the extracted data to the results datastore.
+          Regardless of the value of this option, the data will be stored in the
+          `data` of output States.
+        </>
+      ),
+    },
+    {
+      name: "mergeOn",
+      required: false,
+      type: "string",
+      default: "",
+      description: (
+        <>
+          When a key name is provided for this option (and the 'write' option is
+          true), the output will be merged with the output generated from the
+          prior step that has the same value for the provided key. If you would
+          like to merge the output of multiple steps, use mergeOn in each
+          subsequent step. If 'write' is false, this option has no effect.
+        </>
+      ),
+    },
+  ]}
+/>
+
+<br />
+<NoteSection>
+  <b>
+    For more information on the format of the Schema option, see the "Writing
+    Schemas" section in the documentation for{" "}
+    <Link to="/actions/extract">Extract</Link>
+  </b>
+</NoteSection>
+
+## Relevant [Locators](/locators)
+
+The `extract-many` action can utilize [Locators](/locators) that have a `key` corresponding to a `key` in the action's `schema`.
+
+Additionally, the special key `"$container"` can be used in a Locator to indicate a set of elements that have a 1:1 correspondence with the desired output, i.e. where each instance of the element contains all the data for one desired instance of the output.
+
+Additionally, the special key `"$next"` can be used to indicate an element that should be clicked to move to the next page of results, in situations involving pagination.
+
+Additionally, the special key `"$scroll"` can be used when the `scroll` option is `true`, to specify the element to scroll.

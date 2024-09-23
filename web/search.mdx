@@ -1,0 +1,125 @@
+import OptionsTable from "../../components/OptionsTable.tsx";
+import { Link } from "react-router-dom";
+
+# Action: `search`
+
+The `search` action uses Indexical's Search Engine integration to execute a search query, then creates output States from the results. It supports a standard set of [advanced search operators](https://ahrefs.com/blog/google-advanced-search-operators/) that can be used to craft more specific queries.
+
+This action is useful for finding information on the web, but it can also be very useful for finding information on a single domain, as shown in the example below (which relies on [Special Values](/values)).
+
+Note that pipelines using the `search` action often take `textInputs` as the input in their [Runs](/runs), instead of `urls`. See the [Runs](/runs) documentation's table of options for more details.
+
+## Examples
+
+This example uses the URL of the Input [State](/states) to limit the search to a specific site/domain. This can be a quick & cost-effective way to find information on a website, as an alternative to the [Navigate Action](/actions/navigate):
+
+```json
+{
+  "action": "search",
+  "query": "$: Pricing site:$url",
+  "limit": 1
+}
+```
+
+This example uses data provided via `textInputs` in the Run specification (see [Runs](/runs) for more detail), which becomes available in the State's `data.input` variable. If this variable is present and no `query` is provided, the value of `data.input` is used as the query. Here, we instead use it to construct a more complicated query.
+
+```json
+{
+  "action": "search",
+  "limit": 1,
+  "query": "$: Terms of Service for $data.input"
+}
+```
+
+The [Run](/runs) for the pipeline containing the above step (here names `tos-finder`) might look something like this:
+
+```json
+{
+  "name": "tos-finder",
+  "textInputs": ["OpenAI", "Apple", "Facebook"]
+}
+```
+
+Note that a Run must contain _either_ `textInputs` _or_ `urls`, never both.
+
+Both of the examples above use the String Templating Special Value, see [Special Values](/values) for more information.
+
+## Available Options
+
+(See also the Universal Options in the [Actions](/actions) top-level Documentation)
+
+<OptionsTable
+  rows={[
+    {
+      name: "query",
+      required: true,
+      type: (
+        <>
+          string, or{" "}
+          <Link to="/values" className="whitespace-nowrap">
+            Special Values
+          </Link>
+        </>
+      ),
+      default: null,
+      description: (
+        <>
+          The query to search for. Often relies on{" "}
+          <Link to="/values" className="whitespace-nowrap">
+            Special Values
+          </Link>
+        </>
+      ),
+    },
+    {
+      name: "limit",
+      required: false,
+      type: "number",
+      default: "",
+      description: <>Only output at most this number of links/States.</>,
+    },
+    {
+      name: "filter",
+      required: false,
+      type: (
+        <>
+          string, or{" "}
+          <Link to="/values" className="whitespace-nowrap">
+            Special Values
+          </Link>
+        </>
+      ),
+      default: "",
+      description: (
+        <>
+          A natural language description of the desired output links. The
+          Indexical AI will use this description, along with the title and blurb
+          of search results, to discard any that seem to not meet the provided
+          description.
+        </>
+      ),
+    },
+    {
+      name: "validation",
+      required: false,
+      type: "object (see below)",
+      default: "",
+      description: (
+        <>Validate the step's output set using these criteria(see below)</>
+      ),
+    },
+    {
+      name: "validation.size.min",
+      required: false,
+      type: "number",
+      default: 0,
+      description: (
+        <>Fail the step unless it produces at least this many output states</>
+      ),
+    },
+  ]}
+/>
+
+## Relevant [Locators](/locators)
+
+The `search` action does not currently support any manually-provided Locators.

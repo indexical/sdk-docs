@@ -1,0 +1,38 @@
+import OptionsTable from "../../components/OptionsTable.tsx";
+import { Link } from "react-router-dom";
+
+# Action: `input-many`
+
+The `input-many` action starts with the input State and produces a **set** of output States such that each output State is the input State with an [Interaction](/interactions) added, and the output States **collectively** accomplish the goal (see example below).
+
+This action is currently considered experimental and primarily works in scenarios involving `<select>` inputs.
+
+## Example
+
+```json
+{
+  "action": "input-many",
+  "goal": "Try every possible city in the drop-down"
+}
+```
+
+## Available Options
+
+(See also the Universal Options in the [Actions](/actions) top-level Documentation)
+
+<OptionsTable
+  rows={[
+    {
+      name: "goal",
+      required: true,
+      type: "string",
+      default: null,
+      description: "A natural language goal for the AI to try to achieve.",
+    },
+  ]}
+/>
+
+## Relevant [Locators](/locators)
+
+The `input-many` action does not currently support any manually-provided Locators.
+navigate
