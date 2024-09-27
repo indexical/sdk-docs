@@ -1,27 +1,25 @@
-import OptionsTable from "../../components/OptionsTable.tsx";
-import { Link } from "react-router-dom";
+---
+title: Navigate
+---
 
-# Action: `navigate`
+import { OptionsTable } from "/snippets/OptionsTable.mdx";
 
-The `navigate` action will start at the input State and follow a link on the page that our AI believes will get it closer to the stated `goal`. It will then repeat this process until either it believes the `goal` has been reached or it hits the maximum number of `hops` specified as an option.
-
-This action can also be used to 'manually' navigate by manipulating/constructing a URL as a string.
+The `navigate` Transform will start at the input State and follow a link on the page that it believes will get it closer to the stated `goal` (using an LLM). It will then repeat this process until either it believes the `goal` has been reached or it hits the maximum number of `hops` specified as an option. The final url is used for the output State.
 
 ## Example
 
-```json
-{
-  "action": "navigate",
-  "goal": "Find a contact page",
-  "hops": {
-    "max": 3
-  }
-}
+```ts
+import { navigate } from "indexical/dist/web";
+
+const myTransform = navigate({
+  goal: "Find a contact page",
+  hops: {
+    max: 3,
+  },
+});
 ```
 
 ## Available Options
-
-(See also the Universal Options in the [Actions](/actions) top-level Documentation)
 
 <OptionsTable
   rows={[
@@ -29,22 +27,19 @@ This action can also be used to 'manually' navigate by manipulating/constructing
       name: "goal",
       required: true,
       type: "string",
-      default: null,
-      description:
-        "A natural language goal for the AI to try to achieve. This option is optional ONLY if using the 'url' option for direct/manual navigation.",
+      description: "A natural language goal for the AI to try to achieve.",
     },
     {
       name: "hops",
       required: false,
       type: "object (see below)",
-      default: "",
       description: <>(see below)</>,
     },
     {
       name: "hops.max",
       required: false,
       type: "number",
-      default: "10",
+      default: 10,
       description: (
         <>
           Set the maximum number of times to try following links before giving
@@ -56,7 +51,6 @@ This action can also be used to 'manually' navigate by manipulating/constructing
       name: "pattern",
       required: false,
       type: "string",
-      default: "",
       description: (
         <>
           Specify a regular expression that the final URL reached should conform
@@ -68,7 +62,6 @@ This action can also be used to 'manually' navigate by manipulating/constructing
       name: "try",
       required: false,
       type: "string[]",
-      default: "[]",
       description: (
         <>
           Provide relative paths in this array, and the Indexical AI will try
@@ -78,24 +71,10 @@ This action can also be used to 'manually' navigate by manipulating/constructing
         </>
       ),
     },
-    {
-      name: "url",
-      required: false,
-      type: (
-        <>
-          string or{" "}
-          <Link to="/values" className="whitespace-nowrap">
-            Special Values
-          </Link>
-        </>
-      ),
-      default: "[]",
-      description:
-        "Output a state with the provided URL as its URL (skip all AI behavior and do not render the input state.",
-    },
-  ]}
+
+]}
 />
 
-## Relevant [Locators](/locators)
+## Relevant [Locators](/start/locators)
 
-The `navigate` action does not currently support any manually-provided Locators.
+The `navigate` Transform does not currently support any manually-provided Locators.

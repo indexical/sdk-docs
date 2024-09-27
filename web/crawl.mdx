@@ -1,24 +1,24 @@
-import OptionsTable from "../../components/OptionsTable.tsx";
-import { Link } from "react-router-dom";
+---
+title: "Crawl"
+---
 
-# Action: `crawl`
+import { OptionsTable } from "/snippets/OptionsTable.mdx";
 
-The `crawl` action will start at the Input State and attempt to find all URLs reachable from this state. It will then output an Output State for each URL that was found. This action does not have any AI/LLM functionality, so it does not require or accept a natural language `goal`. The `mode` option (as well as the `pattern` option and `limit` option) can be used to specify a strategy for controlling which URLs are included in the crawl.
+The `crawl` Transform will load the URL of the Input State and attempt to find all URLs reachable from this state. It will then output an Output State for each URL that was found. This Transform does not have any AI/LLM functionality. The `mode` option (as well as the `pattern` option and `limit` option) can be used to specify a strategy for controlling which URLs are included in the crawl.
 
 ## Example
 
 This example will crawl the Input State's URL, following only URLs that have the same host (i.e. domain and subdomain) as the Input State:
 
-```json
-{
-  "action": "crawl",
-  "mode": "host"
-}
+```ts
+import { crawl } from "indexical/dist/web";
+
+const myTransform = crawl({
+  mode: "host",
+});
 ```
 
-## Available Options
-
-(See also the Universal Options in the [Actions](/actions) top-level Documentation)
+## Options
 
 <OptionsTable
   rows={[
@@ -26,7 +26,7 @@ This example will crawl the Input State's URL, following only URLs that have the
       name: "mode",
       required: false,
       type: '"domain" or "host" or "all"',
-      default: '"domain"',
+      default: "domain",
       description: (
         <>
           If "domain" (default): only follow/crawl URLs that share the same main
@@ -46,7 +46,7 @@ This example will crawl the Input State's URL, following only URLs that have the
       name: "pattern",
       required: false,
       type: "string (RegExp)",
-      default: '".*"',
+      default: ".*",
       description: (
         <>
           Only follow/crawl URLs that match the provided regular expression.
@@ -70,6 +70,6 @@ This example will crawl the Input State's URL, following only URLs that have the
   ]}
 />
 
-## Relevant [Locators](/locators)
+## Relevant [Locators](/start/locators)
 
-The `crawl` action does not currently support any manually-provided Locators.
+The `crawl` Transform does not currently support any manually-provided Locators.

@@ -3,8 +3,20 @@ title: "Installation"
 description: "Start building AI-powered data extraction workflows in minutes."
 ---
 
-## Installing `indexical`
+Indexical Projects are Typescript projects built on top of the Indexical Typescript SDK. While projects _can_ be created manually, using the Indexical project generator is highly recommended to ensure that projects have the correct structure and the latest dependencies.
+
+## Create a Project
+
+Indexical requires a current version of Node/NPM. To create a Node
+
+To create a new project, run the following command, which will install the project generator (if needed) and create a project with the provided name in the current directory:
 
 ```bash
 npm create indexical project-name-here
 ```
+
+Provide answers to the prompts that appear (name, description, etc.). Specifically, provide an Indexical API Key (generated from the Indexical Dashboard) if you'd like to run your Indexical project in our cloud.
+
+## Next Steps
+
+Once you've created a project, you'll do most of your coding within the `pipelines` and `runs` directories. If you open them, you'll find sample files indicating how to write a pipeline/run. For more information on the capabilities and options available, as well as the pre-made transforms offered by the Indexical platform, keep reading!

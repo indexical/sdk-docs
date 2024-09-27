@@ -2,3 +2,98 @@
 title: "Creating Transforms"
 description: "The basic building block of Indexical"
 ---
+
+The `Transform` is the central abstraction of Indexical. A Transform basically just encapsulates a function, one that operates on an input object and produces one or more output objects. Transforms also allow for chaining, so that a Transform's function will be applied individually to each output of the previous Transform. We refer to the inputs and outputs of Transforms as `State`s, and they typically keep track of things like (as input) the current URL to process or (as output) the URLs to navigate to. However, you're also free to treat them as arbitrary packages of data. A `State` must conform to the following type definition:
+
+```ts
+interface State {
+  url: string;
+  data?: Record<string, any>;
+}
+```
+
+`url` is currently always required, as most Indexical-provided transforms expect it, but can be a blank or english-language descriptive string if you're writing custom transforms where the concept of a url is irrelevant. `data` can be an arbitrary object of serializable data, or can also be omitted if only the `url` is needed (i.e. if the Transform itself will fetch data from the url).
+
+## A Transform From Scratch
+
+To create your own transform, use the `createTransform` function exported by the Indexical SDK (installed by default in your Indexical project). This function must be passed a function that accepts the following object as its input:
+
+```ts
+interface TransformInput {
+  state: State; // The input state
+  write: (result: object) => Promise<void>; // A callback for writing a result to the result store.
+  parameters: object; // Parameters provided when running the transform
+}
+```
+
+As its output, this function should produce a State, an array of States, or `void`.
+
+Here's a simple example Transform that writes a count (in the state's data) to the result store, then produces an output state with that count incremented.
+
+```ts
+import { createTransform } from "indexical";
+
+const t = createTransform(({ state, write }) => {
+  write({ count: state.data.count });
+  return {
+    ...state,
+    data: {
+      count: state.data.count + 1,
+    },
+  };
+});
+```
+
+You can chain Transforms by using their `.then` method, which returns a new Transform as a result, one that includes both the chained transforms. E.g., to modify the above transform to also write the incremented state:
+
+```ts
+const t = createTransform(({ state, write }) => {
+  write({ count: state.data.count, incremented: false });
+  return {
+    ...state,
+    data: {
+      count: state.data.count + 1,
+    },
+  };
+}).then(({ state, write }) => {
+  write({ count: state.data.count, incremented: true });
+});
+```
+
+Note that `.then` accepts either an instance of Transform _or_ a function (as in the example above).
+
+<Info>Creating a Transform does _not_ run the computation in it!</Info>
+
+## Running a Transform
+
+On its own, creating a Transform doesn't do anything. In order to produce results, the Transform must be run. To run a transform, simply call the `.run` method on the instance (which can be a chain of Transforms). This method will accept an array of states, and will run the entire Transform on each item in the array in parallel. For example, using the transform defined above:
+
+```ts
+t.run([
+  { url: "", data: { count: 123 } },
+  { url: "", data: { count: 765 } },
+  { url: "", data: { count: 241 } },
+]);
+```
+
+`.run` also accepts an optional second argument, an object of arbitrary parameters, which become available within the function(s) of the Transform (see above).
+Additionally, `.run` can be passed an array of strings instead of an array of states, and they will be converted to states (with the string as the URL).
+
+<Tip>
+  Typically, we recommend writing and chaining Transforms in files in the
+  `pipelines` folder of your project, and importing & calling `.run` on them in
+  files in your `runs` folder. This convention helps separate a record of runs
+  from the actual logic of your transforms.
+</Tip>
+
+## Launching Indexical Projects
+
+Your Indexical Project contains scripts for executing the code that you've written in the Indexical Cloud. To run, simply make sure you provided an API key when creating the project, then, from the project directory, run:
+
+```bash
+npm run deploy runs/run-file-name.ts
+```
+
+## Indexical-Provided Transforms
+
+The information above covers writing your own transform with custom logic. However, much common AI-assisted functionality for web-scraping and data extraction is already provided for you in the Indexical SDK's library of pre-built Transforms. These can be used just as you would use Transforms created with `createTransform`. Head over to the 'Web Transforms' section of the documentation to learn more!

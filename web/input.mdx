@@ -1,24 +1,22 @@
-import OptionsTable from "../../components/OptionsTable.tsx";
-import { Link } from "react-router-dom";
+---
+title: Input
+---
 
-# Action: `input`
+import { OptionsTable } from "/snippets/OptionsTable.mdx";
 
-The `input` action will add [Interactions](/interactions) to the input State that satisfy the provided goal, and then output the new State (with Interactions added).
-
-This action can also be used to 'manually' add Interactions via the `interactions` option.
+The `input` Transform modifies the input State to produce an output State with information added about ways to interact with the webpage represented by the input State in order to accomplish the provided goal.
 
 ## Example
 
-```json
-{
-  "action": "input",
-  "goal": "Set the state to be 'California'"
-}
+```ts
+import { input } from "indexical/dist/web";
+
+const myTransform = input({
+  goal: "Set the state to be 'California'",
+});
 ```
 
 ## Available Options
-
-(See also the Universal Options in the [Actions](/actions) top-level Documentation)
 
 <OptionsTable
   rows={[
@@ -26,41 +24,24 @@ This action can also be used to 'manually' add Interactions via the `interaction
       name: "goal",
       required: true,
       type: "string",
-      default: null,
       description: "A natural language goal for the AI to try to achieve.",
     },
     {
       name: "submit",
       required: false,
       type: "boolean",
-      default: "false",
+      default: false,
       description: (
         <>
-          If true, the action will additionally attempt to add an Interaction
+          If true, the Transform will additionally attempt to add an Interaction
           that submits the form on the current page
-        </>
-      ),
-    },
-    {
-      name: "interactions",
-      required: false,
-      type: (
-        <>
-          <Link to="/interactions">Interaction</Link>[]
-        </>
-      ),
-      default: "",
-      description: (
-        <>
-          A list of JSON <Link to="/interactions">Interactions</Link> to append
-          to the input State, which is then produced as output.
         </>
       ),
     },
   ]}
 />
 
-## Relevant [Locators](/locators)
+## Relevant [Locators](/start/locators)
 
-The `input` action does not currently support any manually-provided Locators.
+The `input` Transform does not currently support any manually-provided Locators.
 navigate

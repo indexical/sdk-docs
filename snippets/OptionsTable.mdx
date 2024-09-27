@@ -1,0 +1,14 @@
+export const OptionsTable = ({ rows }) => (
+  <>
+    {rows.map((r) => (
+      <ParamField
+        query={r.name}
+        type={r.type}
+        default={r.default}
+        required={r.required}
+      >
+        {r.description}
+      </ParamField>
+    ))}
+  </>
+);

@@ -2,8 +2,8 @@
   "$schema": "https://mintlify.com/schema.json",
   "name": "Indexical Docs",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/logo.png",
+    "light": "/logo/logo.png"
   },
   "favicon": "/favicon.svg",
   "colors": {
@@ -30,14 +30,14 @@
   "navigation": [
     {
       "group": "Basics",
-      "pages": ["start/installation", "start/transforms"]
+      "pages": ["start/installation", "start/transforms", "start/locators"]
     },
     {
       "group": "CLI",
       "pages": ["cli/usage"]
     },
     {
-      "group": "Web Actions",
+      "group": "Web Transforms",
       "pages": [
         "web/crawl",
         "web/extract",
@@ -45,7 +45,7 @@
         "web/input",
         "web/input-many",
         "web/navigate",
-        "web/search"
+        "web/navigate-many"
       ]
     }
   ],

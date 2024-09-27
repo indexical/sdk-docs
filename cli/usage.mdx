@@ -1,0 +1,46 @@
+---
+title: "Using the Indexical CLI"
+description: ""
+---
+
+Every Indexical Project comes integrated with the Indexical CLI, for common tasks such as launching runs or fetching results. We recommend using the Indexical CLI using `npm` in your project directory, to ensure the appropriate version of the CLI is being used.
+
+## `npm run dev`
+
+Runs a file in your Indexical project locally, for debugging purposes.
+
+Example:
+
+```bash
+npm run dev runs/sample.ts
+```
+
+## `npm run deploy`
+
+Run a file in your Indexical project, in the Indexical cloud.
+
+Example:
+
+```bash
+npm run deploy runs/sample.ts
+```
+
+## `npm run indexical history`
+
+View a list of your account's previous runs, as well as their current status
+
+Example:
+
+```bash
+npm run indexical history
+```
+
+## `npm run indexical results `
+
+Pull the results of an Indexical run (by ID), as newline-delimited JSON (JSONL). Run ID is visible in the console or when running `npm run indexical history`.
+
+Example:
+
+```bash
+npm run indexical results XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
+```

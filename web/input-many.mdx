@@ -1,24 +1,22 @@
-import OptionsTable from "../../components/OptionsTable.tsx";
-import { Link } from "react-router-dom";
+---
+title: Input Many
+---
 
-# Action: `input-many`
+import { OptionsTable } from "/snippets/OptionsTable.mdx";
 
-The `input-many` action starts with the input State and produces a **set** of output States such that each output State is the input State with an [Interaction](/interactions) added, and the output States **collectively** accomplish the goal (see example below).
-
-This action is currently considered experimental and primarily works in scenarios involving `<select>` inputs.
+The `inputMany` Transform starts with the input State and produces a **set** of output States such that each output State is the input State information added about ways to interact with the webpage represented by the input State. The output States **collectively** accomplish the goal provided (see example below).
 
 ## Example
 
-```json
-{
-  "action": "input-many",
-  "goal": "Try every possible city in the drop-down"
-}
+```ts
+import { inputMany } from "indexical/dist/web";
+
+const myTransform = inputMany({
+  goal: "Try every possible city in the drop-down",
+});
 ```
 
 ## Available Options
-
-(See also the Universal Options in the [Actions](/actions) top-level Documentation)
 
 <OptionsTable
   rows={[
@@ -26,13 +24,11 @@ This action is currently considered experimental and primarily works in scenario
       name: "goal",
       required: true,
       type: "string",
-      default: null,
       description: "A natural language goal for the AI to try to achieve.",
     },
   ]}
 />
 
-## Relevant [Locators](/locators)
+## Relevant [Locators](/start/locators)
 
-The `input-many` action does not currently support any manually-provided Locators.
-navigate
+The `inputMany` Transform does not currently support any manually-provided Locators.

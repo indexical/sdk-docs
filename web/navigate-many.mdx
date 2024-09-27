@@ -1,24 +1,22 @@
-import OptionsTable from "../../components/OptionsTable.tsx";
-import { Link } from "react-router-dom";
+---
+title: Navigate Many
+---
 
-# Action: `navigate-many`
+import { OptionsTable } from "/snippets/OptionsTable.mdx";
 
-The `navigate-many` action will select all the links on the current page that align with the provided `goal`, and output a new State for each one. If the current page includes pagination, this step will attempt to automatically interact as required to flip through the pages.
-
-This action can also be used to 'manually' create new states via the `urls` option.
+The `navigateMany` Transform will select all the links on the current page that align with the provided `goal`, and output a new State for each one. If the current page includes pagination, this step will attempt to automatically interact as required to flip through the pages.
 
 ## Example
 
-```json
-{
-  "action": "navigate-many",
-  "goal": "Find the links to all the profiles"
-}
+```ts
+import { navigateMany } from "indexical/dist/web";
+
+const myTransform = navigateMany({
+  goal: "Find the links to all the profiles",
+});
 ```
 
 ## Available Options
-
-(See also the Universal Options in the [Actions](/actions) top-level Documentation)
 
 <OptionsTable
   rows={[
@@ -26,17 +24,14 @@ This action can also be used to 'manually' create new states via the `urls` opti
       name: "goal",
       required: true,
       type: "string",
-      default: null,
-      description:
-        "A natural language goal for the AI to try to achieve. This option is required EXCEPT when using the 'urls' or 'paths' options for direct/manual navigation.",
+      description: "A natural language goal for the AI to try to achieve.",
     },
     {
       name: "validation",
       required: false,
       type: "object (see below)",
-      default: "",
       description: (
-        <>Validate the step's output set using these criteria(see below)</>
+        <>Validate the step's output set using these criteria (see below)</>
       ),
     },
     {
@@ -52,7 +47,7 @@ This action can also be used to 'manually' create new states via the `urls` opti
       name: "delay",
       required: false,
       type: "number or [number, number]",
-      default: "0",
+      default: 0,
       description: (
         <>
           If the page involves pagination, this option introduces a delay after
@@ -66,7 +61,7 @@ This action can also be used to 'manually' create new states via the `urls` opti
       name: "scroll",
       required: false,
       type: "boolean",
-      default: "false",
+      default: false,
       description: (
         <>
           This option, when true, will attempt to auto-trigger any scroll-based
@@ -79,45 +74,21 @@ This action can also be used to 'manually' create new states via the `urls` opti
       name: "limit",
       required: false,
       type: "number",
-      default: "",
       description: <>Only select at most this number of links to output.</>,
     },
     {
       name: "paths",
       required: false,
-      type: (
-        <>
-          string[] or{" "}
-          <Link to="/values" className="whitespace-nowrap">
-            Special Values
-          </Link>
-        </>
-      ),
-      default: "",
+      type: <>string[]</>,
       description:
         "Output states with the provided paths,relative to the input state's URL.",
-    },
-    {
-      name: "urls",
-      required: false,
-      type: (
-        <>
-          string[] or{" "}
-          <Link to="/values" className="whitespace-nowrap">
-            Special Values
-          </Link>
-        </>
-      ),
-      default: "",
-      description:
-        "Output states with the provided URLs as their URL (skip all AI behavior and do not render the input state).",
     },
   ]}
 />
 
-## Relevant [Locators](/locators)
+## Relevant [Locators](/start/locators)
 
-The `navgate-many` action can utilize a [Locator](/locators) with the special key `"$link"` to identify all the link elements (i.e. `<a>` elements) on the page that should be followed.
+The `navgateMany` Transform can utilize a [Locator](/start/locators) with the special key `"$link"` to identify all the link elements (i.e. `<a>` elements) on the page that should be followed.
 
 Additionally, the special key `"$next"` can be used to indicate an element that should be clicked to move to the next page of results, in situations involving pagination.
 

@@ -1,35 +1,32 @@
-import OptionsTable from "../../components/OptionsTable.tsx";
-import NoteSection from "../../components/NoteSection.tsx";
-import { Link } from "react-router-dom";
+---
+title: Extract Many
+---
 
-# Action: `extract-many`
+import { OptionsTable } from "/snippets/OptionsTable.mdx";
 
-The `extract-many` action is a specialized version of `extract` that will generate **multiple** JSON datastructures from the current page, all using the same provided schema. It's appropriate when you would like to extract all instances of a certain data structure from a page. If the current page includes pagination, this step will attempt to automatically interact as required to flip through the pages.
-
-The behavior of `extract-many` can be roughly duplicated by using `extract` with a schema containing an array of objects, but this will likely perform substantially worse due to a lack of optimizations.
+The `extractMany` Transform is a specialized version of `extract` that will generate & write **multiple** JSON datastructures from the current page, all using the same provided schema. It's appropriate when you would like to extract all instances of a certain data structure from a page. If the current page includes pagination, this step will attempt to automatically interact as required to flip through the pages.
 
 ## Example
 
-```json
-{
-  "action": "extract-many",
-  "goal": "Get details on all the books listed on the page",
-  "schema": {
-    "title": {
-      "type": "string",
-      "description": "Book title"
+```ts
+import { extractMany } from "indexical/dist/web";
+
+const myTransform = extractMany({
+  goal: "Get details on all the books listed on the page",
+  schema: {
+    title: {
+      type: "string",
+      description: "Book title",
     },
-    "price": {
-      "type": "number",
-      "description": "Book price in USD"
-    }
-  }
-}
+    price: {
+      type: "number",
+      description: "Book price in USD",
+    },
+  },
+});
 ```
 
 ## Available Options
-
-(See also the Universal Options in the [Actions](/actions) top-level Documentation)
 
 <OptionsTable
   rows={[
@@ -37,20 +34,15 @@ The behavior of `extract-many` can be roughly duplicated by using `extract` with
       name: "goal",
       required: true,
       type: "string",
-      default: null,
       description: "A natural language goal for the AI to try to achieve.",
     },
     {
       name: "schema",
-      required: false,
-      type: (
-        <>
-          object (see the "Writing Schemas" section in the{" "}
-          <Link to="/actions/extract">Extract docs</Link>)
-        </>
+      required: true,
+      type: <>object</>,
+      description: (
+        <>A JSON Schema defining the desired output data structure</>
       ),
-      default: "",
-      description: <>A schema defining the desired output data structure</>,
     },
     {
       name: "validation",
@@ -58,7 +50,7 @@ The behavior of `extract-many` can be roughly duplicated by using `extract` with
       type: "object (see below)",
       default: "",
       description: (
-        <>Validate the step's output set using these criteria(see below)</>
+        <>Validate the step's output set using these criteria (see below)</>
       ),
     },
     {
@@ -77,7 +69,7 @@ The behavior of `extract-many` can be roughly duplicated by using `extract` with
       name: "scroll",
       required: false,
       type: "boolean",
-      default: "false",
+      default: false,
       description: (
         <>
           This option, when true, will attempt to auto-trigger any scroll-based
@@ -90,7 +82,7 @@ The behavior of `extract-many` can be roughly duplicated by using `extract` with
       name: "deduplicate",
       required: false,
       type: "boolean",
-      default: "false",
+      default: false,
       description: (
         <>
           This option, when true, will deduplicate extracted results so that
@@ -102,7 +94,7 @@ The behavior of `extract-many` can be roughly duplicated by using `extract` with
       name: "delay",
       required: false,
       type: "number or [number, number]",
-      default: "0",
+      default: 0,
       description: (
         <>
           If the page involves pagination, this option introduces a delay after
@@ -116,14 +108,13 @@ The behavior of `extract-many` can be roughly duplicated by using `extract` with
       name: "limit",
       required: false,
       type: "number",
-      default: "",
       description: <>Only generate at-most this many output objects</>,
     },
     {
       name: "mode",
       required: false,
       type: '"textual" or "visual"',
-      default: '"textual"',
+      default: "textual",
       description: (
         <>
           Whether to process the current page as text or as an image when
@@ -138,7 +129,7 @@ The behavior of `extract-many` can be roughly duplicated by using `extract` with
       name: "write",
       required: false,
       type: "boolean",
-      default: "true",
+      default: true,
       description: (
         <>
           Whether or not to write the extracted data to the results datastore.
@@ -151,7 +142,6 @@ The behavior of `extract-many` can be roughly duplicated by using `extract` with
       name: "mergeOn",
       required: false,
       type: "string",
-      default: "",
       description: (
         <>
           When a key name is provided for this option (and the 'write' option is
@@ -166,17 +156,14 @@ The behavior of `extract-many` can be roughly duplicated by using `extract` with
 />
 
 <br />
-<NoteSection>
-  <b>
-    For more information on the format of the Schema option, see the "Writing
-    Schemas" section in the documentation for{" "}
-    <Link to="/actions/extract">Extract</Link>
-  </b>
-</NoteSection>
+<Note>
+  For more information on the format of the Schema option, see the "Writing
+  Schemas" section in the documentation for [Extract](/web/extract)
+</Note>
 
-## Relevant [Locators](/locators)
+## Relevant [Locators](/start/locators)
 
-The `extract-many` action can utilize [Locators](/locators) that have a `key` corresponding to a `key` in the action's `schema`.
+The `extractMany` Transform can utilize [Locators](/start/locators) that have a `key` corresponding to a `key` in the provided `schema`.
 
 Additionally, the special key `"$container"` can be used in a Locator to indicate a set of elements that have a 1:1 correspondence with the desired output, i.e. where each instance of the element contains all the data for one desired instance of the output.
 

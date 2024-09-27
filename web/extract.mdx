@@ -1,19 +1,19 @@
-import OptionsTable from "../../components/OptionsTable.tsx";
-import { Link } from "react-router-dom";
+---
+title: Extract
+---
 
-# Action: `extract`
+import { OptionsTable } from "/snippets/OptionsTable.mdx";
 
-The `extract` action generate a JSON datastructure from the current page, according to the provided schema. By default, it writes this datastructure to the result datastore as a result, making it available for you to download after the Run's conclusion.
+The `extract` Transform generates & writes a JSON datastructure from the current page, according to the provided schema.
 
-In addition, the data structure extracted with the `extract` action is merged in to the input State's `data` and this new `data` object is available to all subsequent steps in the pipeline.
-
-This step can also be used to operate on the data from previous steps, ignoring the current State (see the `render` and `write` options and the section on [Special Values](/values)).
+In addition, the data structure extracted with the `extract` Transform is merged in to the input State's `data` and this new `data` object is available to all subsequent steps in the pipeline. The output state produced is the same as the input but with the extracted data merged in to the state's data.
 
 ## Example
 
-```json
-{
-  "action": "extract",
+```ts
+import { extract } from "indexical/dist/web";
+
+const myTransform = extract({
   "goal": "Get the basic information about the blog post",
   "schema": {
     "title": {
@@ -31,12 +31,10 @@ This step can also be used to operate on the data from previous steps, ignoring 
         "description": "Blog post publication date"
     },
   }
-}
+})
 ```
 
 ## Available Options
-
-(See also the Universal Options in the [Actions](/actions) top-level Documentation)
 
 <OptionsTable
   rows={[
@@ -44,21 +42,18 @@ This step can also be used to operate on the data from previous steps, ignoring 
       name: "goal",
       required: true,
       type: "string",
-      default: null,
       description: "A natural language goal for the AI to try to achieve.",
     },
     {
       name: "schema",
-      required: false,
+      required: true,
       type: "object (see next section on this page)",
-      default: "",
       description: <>A schema defining the desired output data structure</>,
     },
     {
       name: "validation",
       required: false,
       type: "object (see below)",
-      default: "",
       description: (
         <>Validate the step's output set using these criteria(see below)</>
       ),
@@ -79,7 +74,7 @@ This step can also be used to operate on the data from previous steps, ignoring 
       name: "mode",
       required: false,
       type: '"textual" or "visual"',
-      default: '"textual"',
+      default: 'textual',
       description: (
         <>
           Whether to process the current page as text or as an image when
@@ -94,7 +89,7 @@ This step can also be used to operate on the data from previous steps, ignoring 
       name: "write",
       required: false,
       type: "boolean",
-      default: "true",
+      default: true,
       description: (
         <>
           Whether or not to write the extracted data to the results datastore.
@@ -104,26 +99,13 @@ This step can also be used to operate on the data from previous steps, ignoring 
       ),
     },
     {
-      name: "mergeOn",
-      required: false,
-      type: "string",
-      default: "",
-      description: (
-        <>
-          When a key name is provided for this option (and the 'write' option is
-          true), the output will be merged with the output generated from the prior step
-          that has the same value for the provided key. If you would like to merge the output of multiple steps, use mergeOn in each subsequent step. If 'write' is false, this option has no effect.
-        </>
-      ),
-    },
-    {
       name: "render",
       required: false,
       type: "boolean",
-      default: "true",
+      default: true,
       description: (
         <>
-            If set to false, this action will skip rendering the input State, which can save time and money. Only set to false if you're certain that the step doesn't require the input State's page content (i.e. if it depends entirely on the input State's 'data').
+            If set to false, this Transform will skip rendering the input State, which can save time and money. Only set to false if you're certain that the step doesn't require the input State's page content (i.e. if it depends entirely on the input State's 'data').
         </>
       ),
     },
@@ -135,13 +117,12 @@ This step can also be used to operate on the data from previous steps, ignoring 
 
 The Schemas used in Indexical are a superset of the JSONSchema standard. Before writing any Schemas, it is important to familiarize yourself with the basics of JSONSchema here: [JSONSchema Getting Started Guide](https://json-schema.org/learn/getting-started-step-by-step).
 
-In addition to JSON Schema, Indexical Schemas also support Indexical [Special Values](/values) and a few Indexical-specific data types.
-
 To use a Special Value, just set a key in your schema to the Special Value string. For example, using the Example above, we could add the blog post's URL and content like so:
 
-```json
-{
-  "action": "extract",
+```ts
+import { extract } from "indexical/dist/web";
+
+const myTransform = extract({
   "goal": "Get the basic information about the blog post",
   "schema": {
     "title": {
@@ -161,10 +142,8 @@ To use a Special Value, just set a key in your schema to the Special Value strin
     "link": "$url",
     "content": "$mainContent"
   }
-}
+});
 ```
-
-Make sure to read the [Special Values Documentation](/values) for the full list of Special Values.
 
 Additionally, Indexical also supports the following `type`s (in addition to the ones offered by JSONSchema):
 
@@ -174,9 +153,10 @@ The `"sections"` type will resolve to an array of chunks of text, as defined by 
 
 Building on the earlier example:
 
-```json
-{
-  "action": "extract",
+```ts
+import { extract } from "indexical/dist/web";
+
+const myTransform = extract({
   "goal": "Get the basic information about the blog post",
   "schema": {
     "title": {
@@ -198,7 +178,7 @@ Building on the earlier example:
         "description": "Biographical info about the author."
     }
   }
-}
+});
 ```
 
 This type is experimental, and currently only works on particularly well-structured documents.
@@ -207,9 +187,10 @@ This type is experimental, and currently only works on particularly well-structu
 
 The `"entities"` type will extract an array of entities from the text on the provided page. This type expects a list of categories describing what kind of entities are of-interest, as well as (optional but recommended) some examples of entity extraction on snippets of text. Example usage:
 
-```json
-{
-  "action": "extract",
+```ts
+import { extract } from "indexical/dist/web";
+
+const myTransform = extract({
   "goal": "Get the basic information about the blog post",
   "schema": {
     "title": {
@@ -239,9 +220,9 @@ The `"entities"` type will extract an array of entities from the text on the pro
         }]
     }
   }
-}
+});
 ```
 
-## Relevant [Locators](/locators)
+## Relevant [Locators](/start/locators)
 
-The `extract` action can utilize [Locators](/locators) that have a `key` corresponding to a `key` in the action's `schema`.
+The `extract` Transform can utilize [Locators](/start/locators) that have a `key` corresponding to a `key` in the provided `schema`.

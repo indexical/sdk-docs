@@ -1,11 +1,12 @@
-import OptionsTable from "../../components/OptionsTable.tsx";
-import { Link } from "react-router-dom";
+---
+title: Search
+---
 
-# Action: `search`
+import { OptionsTable } from "/snippets/OptionsTable.mdx";
 
-The `search` action uses Indexical's Search Engine integration to execute a search query, then creates output States from the results. It supports a standard set of [advanced search operators](https://ahrefs.com/blog/google-advanced-search-operators/) that can be used to craft more specific queries.
+The `search` Transform uses Indexical's Search Engine integration to execute a search query, then creates output States from the results. It supports a standard set of [advanced search operators](https://ahrefs.com/blog/google-advanced-search-operators/) that can be used to craft more specific queries.
 
-This action is useful for finding information on the web, but it can also be very useful for finding information on a single domain, as shown in the example below (which relies on [Special Values](/values)).
+This Transform is useful for finding information on the web, but it can also be very useful for finding information on a single domain, as shown in the example below (which relies on [Special Values](/values)).
 
 Note that pipelines using the `search` action often take `textInputs` as the input in their [Runs](/runs), instead of `urls`. See the [Runs](/runs) documentation's table of options for more details.
 
