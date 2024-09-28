@@ -161,11 +161,11 @@ const myTransform = extractMany({
   Schemas" section in the documentation for [Extract](/web/extract)
 </Note>
 
-## Relevant [Locators](/start/locators)
+## Relevant [Strategies](/start/strategies)
 
-The `extractMany` Transform can utilize [Locators](/start/locators) that have a `key` corresponding to a `key` in the provided `schema`.
+The `extractMany` Transform can utilize [Strategies](/start/strategies) that have a `key` corresponding to a `key` in the provided `schema`.
 
-Additionally, the special key `"$container"` can be used in a Locator to indicate a set of elements that have a 1:1 correspondence with the desired output, i.e. where each instance of the element contains all the data for one desired instance of the output.
+Additionally, the special key `"$container"` can be used in a Strategy to indicate a set of elements that have a 1:1 correspondence with the desired output, i.e. where each instance of the element contains all the data for one desired instance of the output.
 
 Additionally, the special key `"$next"` can be used to indicate an element that should be clicked to move to the next page of results, in situations involving pagination.
 

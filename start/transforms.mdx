@@ -94,6 +94,14 @@ Your Indexical Project contains scripts for executing the code that you've writt
 npm run deploy runs/run-file-name.ts
 ```
 
+To run the script locally, for development purposes or smaller scale tasks, just substitute `dev` for `deploy`:
+
+```bash
+npm run dev runs/run-file-name.ts
+```
+
+Using features such as proxies or LLMs when running in `dev` mode requires a local set of environment variables.
+
 ## Indexical-Provided Transforms
 
 The information above covers writing your own transform with custom logic. However, much common AI-assisted functionality for web-scraping and data extraction is already provided for you in the Indexical SDK's library of pre-built Transforms. These can be used just as you would use Transforms created with `createTransform`. Head over to the 'Web Transforms' section of the documentation to learn more!
