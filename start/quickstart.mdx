@@ -1,0 +1,63 @@
+---
+title: "Quickstart"
+description: "Create your first AI-powered data extraction workflow using Indexical."
+---
+
+Indexical Projects are Typescript projects built on top of the Indexical Typescript SDK. While projects _can_ be created manually, using the Indexical project generator is highly recommended to ensure that projects have the correct structure and the latest dependencies. 
+
+## Create a Project
+
+Indexical requires a current version of Node/NPM. To create a new project, run the following command, which will install the project generator (if needed) and create a project with the provided name in the current directory:
+
+```bash
+npm create indexical@latest <project-name-here>
+```
+
+Provide answers to the prompts that appear (name, description, etc.). Specifically, provide an Indexical API Key (generated from the Indexical Dashboard) if you'd like to run your Indexical project in our cloud.
+
+## Create a workflow
+
+Workflows are stored in the `pipelines` directory. Create a new workflow file as shown below 
+
+```typescript pipelines/firstpipeline.ts
+import { crawl, extract } from 'indexical/dist/web';
+
+/* this workflow will: 
+1. crawl through the first 2 pages on the domain
+2.extract the: 
+   a. main title
+   b. the content rendered as markdown  */
+export const pipeline = crawl({
+  limit: 2
+}).then(
+  extract({
+    schema: {
+      title : {
+        type: "string", 
+        description: "the main title of the webpage"
+      },
+      mainContent: '$textContent'
+    }
+  })
+);
+```
+
+## Running a workflow
+
+Then, to run that workflow, we recommend creating a separate file within the `runs` directory. Simply include the URLs for which you'd like to run that workflow as an argument to the run function. 
+
+```typescript runs/firstrun.ts
+import { pipeline } from '../pipelines/firstpipeline.ts';
+
+pipeline.run(
+    ["https://sdkdocs.indexical.dev/",
+     "https://docs.datadoghq.com/api/latest/"]
+     );
+```
+
+And to run that workflow using Indexical's cloud platform, run the following in your terminal: 
+
+```bash
+npm run deploy runs/firstrun.ts
+```
+You can then check on the status of the run and download the results from the [Indexical Dashboard](https://dashboard.indexical.dev/), or using the [Indexical CLI](/cli/usage).
