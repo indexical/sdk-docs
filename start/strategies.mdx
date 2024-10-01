@@ -45,7 +45,7 @@ Often, when building workflows that work across different websites, you'll wish 
 
 The JSONL file should be inside a directory with a name that matches the StrategyStore. Each JSON strategy should take up exactly one line in the file. You're free to choose any file name you like as long as the folder name matches the StrategyStore.
 
-See `strategies/sample/index.jsonl` in a newly created project for an example.
+See `strategies/sample/index.jsonl` in a newly created project for an example. To use that sample StrategyStore, you would use the name `sample` as the StrategyStore name. 
 
 ## Strategy JSON
 
@@ -104,3 +104,12 @@ Below is a list of all the possible options you can provide in a manually create
 <ParamField query="xpath">
   an XPath expression that matches the desired element
 </ParamField>
+
+## Special Keys
+| Key | WebTransforms | Description |
+| :---| :---          | :---        |
+| `$link`     | NavigateMany | CSS/XPath selectors for identifying links to follow |
+| `$url`      | Navigate | Specific URL to navigate to (e.g., "https://example.com/jobs") |
+| `$next`  | NavigateMany, ExtractMany | CSS/XPath selector for the pagination "next" button |
+| `$container`   | ExtractMany | CSS/XPath selectors defining elements that correspond one-to-one with desired output items (e.g., a row if trying to extract a full table of information) |
+| `$scroll`  | Extract, ExtractMany, NavigateMany | CSS/XPath selector for the element to target when implementing infinite scroll functionality |

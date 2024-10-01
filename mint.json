@@ -30,7 +30,11 @@
   "navigation": [
     {
       "group": "Basics",
-      "pages": ["start/installation", "start/transforms", "start/strategies"]
+      "pages": [
+        "start/quickstart",
+        "start/transforms",
+        "start/strategies"
+      ]
     },
     {
       "group": "CLI",
