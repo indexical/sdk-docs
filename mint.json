@@ -38,7 +38,10 @@
     },
     {
       "group": "CLI",
-      "pages": ["cli/usage"]
+      "pages": [
+        "cli/usage",
+        "cli/local"
+      ]
     },
     {
       "group": "Web Transforms",
