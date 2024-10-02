@@ -1,0 +1,35 @@
+---
+title: "Running Locally"
+description: "Running your Indexical projects locally"
+---
+
+## Setting up your environemnt
+
+To run your Indexical projects locally, first make sure that you have included the relevant API_keys in the .env file, as shown below. By default, Indexical workflows use Anthropic's LLM, so make sure to include your Anthropic API_keys. 
+
+```bash .env
+OPENAI_API_KEY=""  # OPTIONAL - only needed if you fall back to OpenAI's model for extraction
+ANTHROPIC_API_KEY="" # NEEDED for any smart extractions
+# optional - input if you want to bring your own proxies (otherwise, you can use Indexical's proxies with by running your workflow in our cloud
+PROXY_ENDPOINT="" 
+PROXY_USERNAME=""
+PROXY_PASSWORD=""
+```
+
+## `npm run dev`
+
+Runs a file in your Indexical project locally, for debugging purposes.
+<Note> When running workflows locally, make sure that you print out the results in the console </Note>
+
+Example:
+
+```typescript runs/sample.ts
+import {pipeline} from "../pipelines/sample.ts"
+
+// IMPORTANT: print out the results to the console
+pipeline.run(["https://sdkdocs.indexical.dev/"]).then(res => console.log(res)); 
+```
+
+```bash
+npm run dev runs/sample.ts
+```

@@ -31,7 +31,7 @@ All are optional in general, but the corresponding functionality will fail local
 
 ## Create a workflow
 
-Workflows are stored in the `pipelines` directory. Create a new workflow file as shown below
+Workflows are stored in the `pipelines` directory. Create a new workflow file as shown below. If you'd like to pass in a [Strategy](start/strategies) for extracting a field of data, you can include the name of the StrategyStore as an argument to the relevant WebTransform. In this workflow, the StrategyStore `docs` is passed in to the `extract` transform. 
 
 ```typescript pipelines/firstpipeline.ts
 import { crawl, extract } from "indexical/dist/web";
@@ -53,10 +53,15 @@ export const pipeline = crawl({
       },
       mainContent: "$textContent",
     },
-  })
+  }, "docs") // strategy-store
 );
 ```
 
+To create the strategy store, add a jsonl file to the relevant subdirectory of the strategies folder. For more information on strategies, see [here](start/strategies). Indexical will first attempt to use that strategy for that WebTransform before falling back to AI-based extraction. 
+
+```jsonl strategies/docs/sample.jsonl
+{"key" : "title" , "css" : "h1", "domain" : "sdkdocs.indexical.dev"}
+```
 ## Running a workflow
 
 Then, to run that workflow, we recommend creating a separate file within the `runs` directory. Simply include the URLs for which you'd like to run that workflow as an argument to the run function.
