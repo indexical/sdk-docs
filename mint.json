@@ -33,15 +33,13 @@
       "pages": [
         "start/quickstart",
         "start/transforms",
-        "start/strategies"
+        "start/strategies",
+        "start/run-parameters"
       ]
     },
     {
       "group": "CLI",
-      "pages": [
-        "cli/usage",
-        "cli/local"
-      ]
+      "pages": ["cli/usage", "cli/local"]
     },
     {
       "group": "Web Transforms",

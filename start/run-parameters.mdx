@@ -1,0 +1,199 @@
+---
+title: "Run Parameters"
+description: "Options for customizing runs"
+---
+
+import { OptionsTable } from "/snippets/OptionsTable.mdx";
+
+The following parameters are used (when applicable) by the Indexical-provided Transforms (see under 'Web Transforms' in this documentation):
+
+<OptionsTable
+  rows={[
+    {
+      name: "concurrency",
+      required: false,
+      type: "number",
+      default: "10",
+      description: (
+        <>
+          The number of simultaneous workers to use while running this pipeline.
+          Setting this too high might trigger anti-bot measures.
+        </>
+      ),
+    },
+    {
+      name: "javascriptEnabled",
+      required: false,
+      type: "boolean",
+      default: true,
+      description: <>Whether or not to render pages with JavaScript.</>,
+    },
+    {
+      name: "proxiesEnabled",
+      required: false,
+      type: "boolean",
+      default: false,
+      description: (
+        <>Whether or not to use a proxy server when making requests.</>
+      ),
+    },
+    {
+      name: "proxiesType",
+      required: false,
+      type: '"residential" or "datacenter"',
+      default: "residential",
+      description: (
+        <>
+          What kind of proxies to use for loading pages. Only used if
+          proxiesEnabled is true.
+        </>
+      ),
+    },
+    {
+      name: "unblockerEnabled",
+      required: false,
+      type: "boolean",
+      default: false,
+      description: (
+        <>
+          Whether or not to use Indexical's currently VERY EXPERIMENTAL AI
+          unblocker when possible. This will make it easier to pull content from
+          sites with advanced anti-bot measures, but it also currently does not
+          support page interactions, so features like pagination and input
+          manipulation will not work. Note that basic unblocking is included in
+          all runs by default; only use this if necessary.
+        </>
+      ),
+    },
+    {
+      name: "llmEnabled",
+      required: false,
+      type: "boolean",
+      default: true,
+      description: (
+        <>
+          Whether or not to send data to the LLM as required by various web
+          transforms. If set to false, all LLM calls will resolve to undefined
+          or empty objects (as appropriate).
+        </>
+      ),
+    },
+    {
+      name: "block",
+      required: false,
+      type: "object (see below)",
+      description: (
+        <>
+          This option allows you to omit loading certain resources (see next 3
+          rows), which can improve performance and save costs. To skip certain{" "}
+          <i>states</i> that you'd rather not process/scrape, see the 'skip'
+          option below.
+        </>
+      ),
+    },
+    {
+      name: "block.resourceTypes",
+      required: false,
+      type: "string[]",
+      default: [],
+      description: (
+        <>
+          Block all resources of the provided kinds when scraping; options
+          include "image", "font", and "stylesheet".
+        </>
+      ),
+    },
+    {
+      name: "block.urls",
+      required: false,
+      type: "string[]",
+      default: [],
+      description: (
+        <>
+          Block resources at the provided URLs when they are included in pages.
+          Note, this does not prevent navigating to these URLs, only loading
+          them on pages that are already navigated to.
+        </>
+      ),
+    },
+    {
+      name: "block.patterns",
+      required: false,
+      type: "string[]",
+      default: [],
+      description: (
+        <>
+          Block resources with URLs matching the provided regular expressions.
+          Note, this does not prevent navigating to these URLs, only loading
+          them on pages that are already navigated to.
+        </>
+      ),
+    },
+    {
+      name: "skip",
+      required: false,
+      type: "object (see below)",
+      description: (
+        <>
+          Whenever a state is created that matches a skipping criteria, the
+          state is discarded (i.e. not scraped or used any further)
+        </>
+      ),
+    },
+    {
+      name: "skip.urls",
+      required: false,
+      type: "string[]",
+      default: [],
+      description: <>A list of URLs to skip (see row above)</>,
+    },
+    {
+      name: "delay",
+      required: false,
+      type: "number or [number, number]",
+      default: 0,
+      description: (
+        <>
+          Introduces a delay after loading each page during the run and before
+          extracting any information from it. Can be a number (ms), or a pair of
+          numbers [min, max].
+        </>
+      ),
+    },
+    {
+      name: "models",
+      required: false,
+      type: "object (see below)",
+      default: 0,
+      description: (
+        <>Which LLM APIs / models to use for specific types of tasks</>
+      ),
+    },
+    {
+      name: "models.extract",
+      required: false,
+      type: "string",
+      default: "claude-sonnet-3.5",
+      description: (
+        <>
+          Which LLM to use for data extraction-related tasks. Options are:
+          "claude-opus", "claude-haiku", "claude-sonnet-3.5", "gpt-4", "gpt-4o",
+          "gpt-3.5", or "disabled" (which prevents LLM usage for these tasks.)
+        </>
+      ),
+    },
+    {
+      name: "models.navigate",
+      required: false,
+      type: "string",
+      default: "gpt-4",
+      description: (
+        <>
+          Which LLM to use for navigation-related tasks. Options are:
+          "claude-opus", "claude-haiku", "claude-sonnet-3.5", "gpt-4", "gpt-4o",
+          "gpt-3.5", or "disabled" (which prevents LLM usage for these tasks.)
+        </>
+      ),
+    },
+  ]}
+/>
